@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harrison 的個人網站 - 移動版</title>
+    
+    <!-- Meta 描述和關鍵字 -->
+    <meta name="description" content="Harrison 的個人網站移動版，展示他的技術能力、專案經驗以及對 C++ 的熱情。">
+    <meta name="keywords" content="Harrison, 個人網站, 軟體開發, C++, 技術庫, 專案展示, 移動版">
+
+    <!-- 引入 Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
+    
+    <!-- 引入 Devicon 圖標庫 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+    
+    <!-- 引入 Font Awesome 圖標庫（僅用於社交媒體圖標） -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    
+    <!-- 引入外部 CSS -->
+    <link rel="stylesheet" href="css/mobile-styles.css">
+    
+    <style>
+        /* 定義 CSS 變量 */
+        :root {
+            --primary-color: #007BFF;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --header-background: rgba(255, 255, 255, 0.95);
+            --section-background: #fff;
+            --section-text-color: #555;
+            --button-background: #007BFF;
+            --button-text-color: #fff;
+            --button-hover-bg: #0056b3;
+            --button-hover-text: #fff; /* 新增變量 */
+            --overlay-color: rgba(0, 123, 255, 0.6);
+            --footer-background: #fff;
+            --footer-text-color: #777;
+            --toggle-button-size: 40px;
+        }
+
+        /* 暗黑模式的 CSS 變量 */
+        body.dark-theme {
+            --primary-color: #90caf9;
+            --background-color: #121212;
+            --text-color: #f1f1f1;
+            --header-background: rgba(18, 18, 18, 0.95);
+            --section-background: #1e1e1e;
+            --section-text-color: #ccc;
+            --button-background: #90caf9;
+            --button-text-color: #121212;
+            --button-hover-bg: #64b5f6;
+            --overlay-color: rgba(0, 123, 255, 0.6);
+            --footer-background: #1e1e1e;
+            --footer-text-color: #ccc;
+        }
+
+        /* 基本重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 字體設置 */
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            line-height: 1.6;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        /* 頂部導航 */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--header-background);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: background 0.3s;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 20px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        nav {
+            position: relative;
+        }
+
+        /* 漢堡菜單按鈕 */
+        .nav-toggle {
+            display: block;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .nav-toggle:focus {
+            outline: none;
+        }
+
+        /* 隱藏的導航菜單 */
+        .nav-menu {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background-color: var(--header-background);
+            position: absolute;
+            top: 50px; /* 根據header高度調整 */
+            left: 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-menu.active {
+            display: flex;
+        }
+
+        .nav-menu li {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .nav-menu li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 1.2em;
+        }
+
+        .nav-menu li a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 主題切換開關樣式 */
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin: 10px auto;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-switch .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .theme-switch .slider::before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        .theme-switch input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        .theme-switch input:checked + .slider::before {
+            transform: translateX(26px);
+        }
+
+        /* 英雄區域 */
+        .hero {
+            background: linear-gradient(to bottom right, #007BFF, #00C6FF), url('background.png') no-repeat center center/cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 70px 20px 20px 20px; /* 為固定導航欄預留空間 */
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-color);
+            z-index: 1;
+            transition: background 0.3s;
+        }
+
+        .hero-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1000px;
+            width: 100%;
+            z-index: 2;
+            background: rgba(0, 123, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            transition: background 0.3s;
+            animation: fadeIn 1s forwards;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            transition: margin 0.3s;
+        }
+
+        .hero-text {
+            max-width: 100%;
+            color: #fff;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-text p {
+            font-size: 1em;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            color: #f1f1f1;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: var(--button-background);
+            color: var(--button-text-color);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-size: 1em;
+        }
+
+        .cta-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        .cta-button:hover {
+            background-color: var(--button-hover-bg);
+            color: var(--button-hover-text);
+        }
+
+        /* 關於我 */
+        #about {
+            background-color: var(--section-background);
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 40px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        #about h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #about p {
+            font-size: 1em;
+            color: var(--section-text-color);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* 技術庫 */
+        #tech-stack {
+            background-color: var(--section-background);
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 40px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        #tech-stack h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .tech-item {
+            background-color: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .tech-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .tech-item i {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .tech-item span {
+            display: block;
+            margin-top: 5px;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 1em;
+        }
+
+        /* 我的專案 */
+        #projects {
+            background-color: var(--section-background);
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 40px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        #projects h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .project-item {
+            background-color: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .project-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .project-item i {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .project-item h3 {
+            font-size: 1.2em;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .project-item p {
+            font-size: 0.9em;
+            color: var(--section-text-color);
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .project-item a {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: color 0.3s;
+            font-size: 1em;
+        }
+
+        .project-item a:hover {
+            color: var(--button-hover-bg);
+        }
+
+        /* 底部資訊 */
+        footer {
+            background-color: var(--footer-background);
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eaeaea;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+            border-radius: 0 0 10px 10px;
+            margin-top: 40px;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        footer p {
+            margin-bottom: 15px;
+            color: var(--footer-text-color);
+            font-size: 0.9em;
+        }
+
+        footer .social-icons a {
+            margin: 0 10px;
+            color: var(--text-color);
+            font-size: 1.5em;
+            transition: color 0.3s;
+        }
+
+        footer .social-icons a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 平滑滾動 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* 響應式設計（針對移動設備進一步優化） */
+        @media (min-width: 769px) {
+            /* 如果需要，這裡可以添加針對更大屏幕的樣式 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 頂部導航 -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">Harrison</div>
+            <nav>
+                <button class="nav-toggle" aria-label="開啟導航菜單" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-menu">
+                    <li><a href="#about">關於我</a></li>
+                    <li><a href="#tech-stack">技術庫</a></li>
+                    <li><a href="#projects">我的專案</a></li>
+                    <!-- 添加主題切換開關 -->
+                    <li>
+                        <label class="theme-switch" aria-label="切換主題">
+                            <input type="checkbox" id="theme-toggle" aria-checked="false">
+                            <span class="slider"></span>
+                        </label>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 英雄區域 -->
+    <section class="hero">
+        <div class="hero-content">
+            <img src="profile.png" alt="Harrison 的照片" class="hero-photo" loading="lazy">
+            <div class="hero-text">
+                <h1>你好，我是 Harrison</h1>
+                <p>一名熱愛編碼的軟體開發者，致力於創造高效且易用的應用程序。</p>
+                <a href="https://github.com/hrs-y" class="cta-button" target="_blank" rel="noopener noreferrer">
+                    <img src="github.png" alt="GitHub" /> View My Github
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 關於我 -->
+    <section id="about">
+        <h2>關於我</h2>
+        <p>
+            你好！我是 Harrison，一名熱愛編程的開發者，專注於 C++，並不斷探索更高效、更優雅的程式設計方式。我對底層技術、演算法和高性能計算特別感興趣，享受解決複雜問題的挑戰。
+            <br><br>
+            目前，我正在開發個人網站，希望透過這個平台分享我的專案、技術學習心得，並與更多對程式設計有熱情的開發者交流。我熱愛研究 C++ 的最佳實踐，包括記憶體管理、多執行緒編程、STL 和設計模式，並持續學習更現代的 C++ 技術。
+            <br><br>
+            除了編碼，我也喜歡探索新技術、參與開源專案，或是挑戰競程題目來鍛煉邏輯思維。如果你對 C++ 或程式開發有興趣，歡迎與我交流，一起成長進步！🚀
+        </p>
+    </section>
+
+    <!-- 技術庫 -->
+    <section id="tech-stack">
+        <h2>我的技術庫</h2>
+        <div class="tech-grid">
+            <div class="tech-item">
+                <i class="devicon-cplusplus-plain colored" title="C++"></i>
+                <span>C++</span>
+            </div>
+            <div class="tech-item">
+                <i class="devicon-html5-plain colored" title="HTML5"></i>
+                <span>HTML5</span>
+            </div>
+            <div class="tech-item">
+                <i class="devicon-java-plain colored" title="Java"></i>
+                <span>Java</span>
+            </div>
+            <div class="tech-item">
+                <i class="devicon-javascript-plain colored" title="JavaScript"></i>
+                <span>JavaScript</span>
+            </div>
+            <div class="tech-item">
+                <i class="devicon-python-plain colored" title="Python"></i>
+                <span>Python</span>
+            </div>
+            <!-- 可根據需要添加更多技術 -->
+        </div>
+    </section>
+
+    <!-- 我的專案 -->
+    <section id="projects">
+        <h2>我的專案</h2>
+        <div class="projects-grid">
+            <!-- 個人網站專案 -->
+            <div class="project-item">
+                <i class="devicon-html5-plain colored" title="個人網站"></i>
+                <h3>個人網站</h3>
+                <p>這是我目前正在使用的個人網站，展示我的技術能力和專案經驗。</p>
+                <a href="https://github.com/hrs-y" target="_blank" rel="noopener noreferrer">查看專案</a>
+            </div>
+            <!-- 我的Blog專案 -->
+            <div class="project-item">
+                <i class="devicon-blogger-plain colored" title="Blog"></i>
+                <i class="devicon-javascript-plain colored" title="JavaScript"></i>
+                <h3>我的Blog</h3>
+                <p>我的個人博客正在開發中，將分享我的技術學習心得和開發經驗。</p>
+                <a href="#" target="_blank" rel="noopener noreferrer">正在開發中</a>
+            </div>
+            <!-- 我的Windows APP專案 -->
+            <div class="project-item">
+                <i class="devicon-csharp-plain colored" title="C#"></i>
+                <h3>我的Windows APP</h3>
+                <p>我正在尋找靈感，計劃開發一款有趣且實用的 Windows 應用程序。</p>
+                <a href="#" target="_blank" rel="noopener noreferrer">正在找靈感</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部資訊 -->
+    <footer>
+        <p>© 2025 Harrison. All rights reserved.</p>
+        <div class="social-icons">
+            <a href="https://github.com/hrs-y" target="_blank" aria-label="Github">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/your-profile" target="_blank" aria-label="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <!-- 你可以在這裡添加更多社交媒體圖標 -->
+        </div>
+    </footer>
+
+    <!-- 更新後的 JavaScript for Theme Toggle 和 漢堡菜單 -->
+    <script>
+        // 主題切換功能
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // 檢查是否有已保存的主題偏好
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark-theme') {
+            body.classList.add('dark-theme');
+            themeToggle.checked = true;
+            themeToggle.setAttribute('aria-checked', 'true');
+        } else {
+            body.classList.remove('dark-theme');
+            themeToggle.checked = false;
+            themeToggle.setAttribute('aria-checked', 'false');
+        }
+
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark-theme');
+                themeToggle.setAttribute('aria-checked', 'true');
+            } else {
+                body.classList.remove('dark-theme');
+                localStorage.removeItem('theme');
+                themeToggle.setAttribute('aria-checked', 'false');
+            }
+        });
+
+        // 漢堡菜單功能
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const expanded = navMenu.classList.contains('active');
+            navToggle.setAttribute('aria-expanded', expanded);
+        });
+
+        // 點擊導航連結後自動關閉菜單
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
