@@ -38,7 +38,7 @@
             --button-background: #007BFF;
             --button-text-color: #fff;
             --button-hover-bg: #0056b3;
-            --button-hover-text: #fff; /* 新增變量 */
+            --button-hover-text: #fff;
             --overlay-color: rgba(0, 123, 255, 0.6);
             --footer-background: #fff;
             --footer-text-color: #777;
@@ -122,37 +122,45 @@
             outline: none;
         }
 
-        /* 隱藏的導航菜單 */
-        .nav-menu {
-            display: none;
-            flex-direction: column;
-            width: 100%;
-            background-color: var(--header-background);
-            position: absolute;
-            top: 50px; /* 根據header高度調整 */
+        /* 隱藏的側邊導航欄 */
+        .side-nav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1001;
+            top: 0;
             left: 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: var(--header-background);
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px; /* 頂部導航高度 */
         }
 
-        .nav-menu.active {
-            display: flex;
+        .side-nav.active {
+            width: 250px;
         }
 
-        .nav-menu li {
-            margin: 15px 0;
-            text-align: center;
-        }
-
-        .nav-menu li a {
+        .side-nav a {
+            padding: 10px 20px;
             text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: color 0.3s;
             font-size: 1.2em;
+            color: var(--text-color);
+            display: block;
+            transition: color 0.3s;
         }
 
-        .nav-menu li a:hover {
+        .side-nav a:hover {
             color: var(--primary-color);
+        }
+
+        /* 關閉側邊導航欄的按鈕 */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            color: var(--text-color);
         }
 
         /* 主題切換開關樣式 */
@@ -513,19 +521,21 @@
                 <button class="nav-toggle" aria-label="開啟導航菜單" aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </button>
-                <ul class="nav-menu">
-                    <li><a href="#about">關於我</a></li>
-                    <li><a href="#tech-stack">技術庫</a></li>
-                    <li><a href="#projects">我的專案</a></li>
-                    <!-- 添加主題切換開關 -->
-                    <li>
-                        <label class="theme-switch" aria-label="切換主題">
-                            <input type="checkbox" id="theme-toggle" aria-checked="false">
-                            <span class="slider"></span>
-                        </label>
-                    </li>
-                </ul>
             </nav>
+        </div>
+        <!-- 側邊導航欄 -->
+        <div id="side-nav" class="side-nav" aria-hidden="true">
+            <span class="close-btn" aria-label="關閉導航菜單">&times;</span>
+            <a href="#about">關於我</a>
+            <a href="#tech-stack">技術庫</a>
+            <a href="#projects">我的專案</a>
+            <!-- 添加主題切換開關 -->
+            <div style="padding: 10px 20px;">
+                <label class="theme-switch" aria-label="切換主題">
+                    <input type="checkbox" id="theme-toggle" aria-checked="false">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
     </header>
 
@@ -658,21 +668,30 @@
 
         // 漢堡菜單功能
         const navToggle = document.querySelector('.nav-toggle');
-        const navMenu = document.querySelector('.nav-menu');
+        const sideNav = document.getElementById('side-nav');
+        const closeBtn = document.querySelector('.close-btn');
 
         navToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            const expanded = navMenu.classList.contains('active');
+            sideNav.classList.toggle('active');
+            const expanded = sideNav.classList.contains('active');
             navToggle.setAttribute('aria-expanded', expanded);
+            sideNav.setAttribute('aria-hidden', !expanded);
         });
 
-        // 點擊導航連結後自動關閉菜單
-        const navLinks = document.querySelectorAll('.nav-menu a');
+        closeBtn.addEventListener('click', () => {
+            sideNav.classList.remove('active');
+            navToggle.setAttribute('aria-expanded', 'false');
+            sideNav.setAttribute('aria-hidden', 'true');
+        });
+
+        // 點擊導航連結後自動關閉側邊導航
+        const navLinks = document.querySelectorAll('.side-nav a');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
-                if (navMenu.classList.contains('active')) {
-                    navMenu.classList.remove('active');
+                if (sideNav.classList.contains('active')) {
+                    sideNav.classList.remove('active');
                     navToggle.setAttribute('aria-expanded', 'false');
+                    sideNav.setAttribute('aria-hidden', 'true');
                 }
             });
         });
