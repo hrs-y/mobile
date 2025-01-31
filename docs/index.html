@@ -29,36 +29,36 @@
     <style>
         /* 定義 CSS 變量 */
         :root {
-            --primary-color: #007BFF;
-            --background-color: #f8f9fa;
-            --text-color: #333;
+            --primary-color: #3A8DFF; /* 柔和的藍色 */
+            --background-color: #FAFAFA; /* 非常淺的灰色 */
+            --text-color: #444444; /* 深灰色 */
             --header-background: rgba(255, 255, 255, 0.95);
-            --section-background: #fff;
-            --section-text-color: #555;
-            --button-background: #007BFF;
-            --button-text-color: #fff;
-            --button-hover-bg: #0056b3;
-            --button-hover-text: #fff;
-            --overlay-color: rgba(0, 123, 255, 0.6);
-            --footer-background: #fff;
-            --footer-text-color: #777;
+            --section-background: #FFFFFF;
+            --section-text-color: #555555;
+            --button-background: #3A8DFF;
+            --button-text-color: #FFFFFF;
+            --button-hover-bg: #2B7FFF; /* 更深的藍色 */
+            --button-hover-text: #FFFFFF;
+            --overlay-color: rgba(58, 141, 255, 0.2); /* 半透明主色 */
+            --footer-background: #FFFFFF;
+            --footer-text-color: #777777;
             --toggle-button-size: 40px;
         }
 
         /* 暗黑模式的 CSS 變量 */
         body.dark-theme {
-            --primary-color: #90caf9;
-            --background-color: #121212;
-            --text-color: #f1f1f1;
-            --header-background: rgba(18, 18, 18, 0.95);
-            --section-background: #1e1e1e;
-            --section-text-color: #ccc;
-            --button-background: #90caf9;
+            --primary-color: #3A8DFF; /* 保持一致 */
+            --background-color: #1A1A1A; /* 深灰色 */
+            --text-color: #CCCCCC; /* 淺灰色 */
+            --header-background: rgba(26, 26, 26, 0.95);
+            --section-background: #1E1E1E;
+            --section-text-color: #CCCCCC;
+            --button-background: #3A8DFF;
             --button-text-color: #121212;
-            --button-hover-bg: #64b5f6;
-            --overlay-color: rgba(0, 123, 255, 0.6);
-            --footer-background: #1e1e1e;
-            --footer-text-color: #ccc;
+            --button-hover-bg: #2B7FFF;
+            --overlay-color: rgba(58, 141, 255, 0.2);
+            --footer-background: #1E1E1E;
+            --footer-text-color: #CCCCCC;
         }
 
         /* 基本重置 */
@@ -212,7 +212,7 @@
 
         /* 英雄區域 */
         .hero {
-            background: linear-gradient(to bottom right, #007BFF, #00C6FF), url('background.png') no-repeat center center/cover;
+            background: linear-gradient(to bottom right, var(--primary-color), #00C6FF), url('background.png') no-repeat center center/cover;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -241,7 +241,7 @@
             max-width: 1000px;
             width: 100%;
             z-index: 2;
-            background: rgba(0, 123, 255, 0.8);
+            background: rgba(58, 141, 255, 0.8); /* 半透明主色 */
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
@@ -472,6 +472,62 @@
             color: var(--button-hover-bg);
         }
 
+        /* 聯絡我欄目 */
+        #contact {
+            background-color: var(--section-background);
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 40px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        #contact h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: #fff;
+            border: 1px solid #eaeaea;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .contact-links a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            background-color: var(--overlay-color);
+        }
+
+        .contact-links svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--primary-color);
+            transition: fill 0.3s;
+        }
+
+        .contact-links a:hover svg {
+            fill: #FFFFFF;
+        }
+
         /* 底部資訊 */
         footer {
             background-color: var(--footer-background);
@@ -490,15 +546,9 @@
             font-size: 0.9em;
         }
 
-        footer .social-icons a {
-            margin: 0 10px;
-            color: var(--text-color);
-            font-size: 1.5em;
-            transition: color 0.3s;
-        }
-
-        footer .social-icons a:hover {
-            color: var(--primary-color);
+        footer .credits {
+            color: var(--footer-text-color);
+            font-size: 0.8em;
         }
 
         /* 平滑滾動 */
@@ -529,6 +579,7 @@
             <a href="#about">關於我</a>
             <a href="#tech-stack">技術庫</a>
             <a href="#projects">我的專案</a>
+            <a href="#contact">聯絡我</a> <!-- 新增聯絡我連結 -->
             <!-- 添加主題切換開關 -->
             <div style="padding: 10px 20px;">
                 <label class="theme-switch" aria-label="切換主題">
@@ -607,7 +658,6 @@
             <!-- 我的Blog專案 -->
             <div class="project-item">
                 <i class="devicon-blogger-plain colored" title="Blog"></i>
-                <i class="devicon-javascript-plain colored" title="JavaScript"></i>
                 <h3>我的Blog</h3>
                 <p>我的個人博客正在開發中，將分享我的技術學習心得和開發經驗。</p>
                 <a href="#" target="_blank" rel="noopener noreferrer">正在開發中</a>
@@ -622,18 +672,67 @@
         </div>
     </section>
 
+    <!-- 聯絡我欄目 -->
+    <section id="contact">
+        <h2>聯絡我</h2>
+        <div class="contact-links">
+            <a href="https://github.com/hrs-y" target="_blank" rel="noopener noreferrer" aria-label="訪問我的 GitHub">
+                <!-- GitHub SVG 圖標 -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color)" aria-hidden="true">
+                    <path d="M12 0C5.372 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 
+                    0-.285-.01-1.04-.015-2.04-3.338.725-4.042-1.61-4.042-1.61C4.422 17.07 3.633 16.7 3.633 16.7c-1.087-.744 
+                    .083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.76-1.605-2.665-.305-5.467-1.333-5.467-5.933 
+                    0-1.31.468-2.381 1.235-3.221-.135-.303-.54-1.523.105-3.176 
+                    0 0 1.005-.322 3.3 1.23a11.5 11.5 0 013.003-.404c1.02.005 2.045.138 3.003.404 
+                    2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.77.84 1.23 1.911 1.23 3.221 
+                    0 4.61-2.805 5.625-5.475 5.92.43.37.81 1.102.81 2.222 
+                    0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.796 24 17.303 
+                    24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+            </a>
+            <a href="https://x.com/HarrisonHao_" target="_blank" rel="noopener noreferrer" aria-label="訪問我的 X (Twitter)">
+                <!-- X (Twitter) SVG 圖標 -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color)" aria-hidden="true">
+                    <path d="M23.954 4.569c-.885.392-1.83.656-2.825.775 
+                    1.014-.611 1.794-1.574 2.163-2.723-.949.555-2.005.959-3.127 
+                    1.184-.897-.957-2.178-1.555-3.594-1.555-2.717 
+                    0-4.92 2.203-4.92 4.917 0 .39.045.765.127 
+                    1.124-4.087-.205-7.713-2.165-10.141-5.144-.423.722-.666 
+                    1.561-.666 2.475 0 1.71.87 3.213 2.188 
+                    4.096-.807-.026-1.566-.248-2.229-.616v.061c0 2.385 
+                    1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 
+                    0-.615-.03-.916-.086.631 1.953 2.445 3.377 
+                    4.6 3.419-1.68 1.319-3.809 2.105-6.102 
+                    2.105-.39 0-.779-.023-1.17-.067 
+                    2.179 1.397 4.768 2.209 7.557 2.209 
+                    9.054 0 14-7.496 14-13.986 0-.21 0-.42-.015-.63.961-.689 
+                    1.8-1.56 2.46-2.548l-.047-.02z"/>
+                </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/harrison-hao-30607134a/" target="_blank" rel="noopener noreferrer" aria-label="訪問我的 LinkedIn">
+                <!-- LinkedIn SVG 圖標 -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color)" aria-hidden="true">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 
+                    2.239 5 5 5h14c2.761 0 5-2.239 
+                    5-5v-14c0-2.761-2.239-5-5-5zm-11 
+                    19h-3v-10h3v10zm-1.5-11.268c-.966 
+                    0-1.75-.784-1.75-1.75s.784-1.75 
+                    1.75-1.75 1.75.784 1.75 
+                    1.75-.784 1.75-1.75 
+                    1.75zm13.5 11.268h-3v-5.604c0-1.337-.027-3.063-1.868-3.063-1.869 
+                    0-2.155 1.458-2.155 
+                    2.96v5.705h-3v-10h2.881v1.367h.041c.401-.76 
+                    1.381-1.561 2.841-1.561 3.041 0 
+                    3.6 2.0 3.6 4.607v5.589z"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
     <!-- 底部資訊 -->
     <footer>
         <p>© 2025 Harrison. All rights reserved.</p>
-        <div class="social-icons">
-            <a href="https://github.com/hrs-y" target="_blank" aria-label="Github">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/your-profile" target="_blank" aria-label="LinkedIn">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <!-- 你可以在這裡添加更多社交媒體圖標 -->
-        </div>
+        <p class="credits">*本頁面由Harrison和ChatGPT呈現</p>
     </footer>
 
     <!-- 更新後的 JavaScript for Theme Toggle 和 漢堡菜單 -->
