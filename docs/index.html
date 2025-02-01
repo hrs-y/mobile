@@ -1,799 +1,685 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harrison 的個人網站 - 移動版</title>
-    
-    <!-- Meta 描述和關鍵字 -->
-    <meta name="description" content="Harrison 的個人網站移動版，展示他的技術能力、專案經驗以及對 C++ 的熱情。">
-    <meta name="keywords" content="Harrison, 個人網站, 軟體開發, C++, 技術庫, 專案展示, 移動版">
-
-    <!-- 引入 Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet">
-    
-    <!-- 引入 Devicon 圖標庫 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
-    
-    <!-- 引入 Font Awesome 圖標庫（僅用於社交媒體圖標） -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    
-    <!-- 引入外部 CSS -->
-    <link rel="stylesheet" href="css/mobile-styles.css">
-    
-    <style>
-        /* 定義 CSS 變量 */
-        :root {
-            --primary-color: #3A8DFF; /* 柔和的藍色 */
-            --background-color: #FAFAFA; /* 非常淺的灰色 */
-            --text-color: #444444; /* 深灰色 */
-            --header-background: rgba(255, 255, 255, 0.95);
-            --section-background: #FFFFFF;
-            --section-text-color: #555555;
-            --button-background: #3A8DFF;
-            --button-text-color: #FFFFFF;
-            --button-hover-bg: #2B7FFF; /* 更深的藍色 */
-            --button-hover-text: #FFFFFF;
-            --overlay-color: rgba(58, 141, 255, 0.2); /* 半透明主色 */
-            --footer-background: #FFFFFF;
-            --footer-text-color: #777777;
-            --toggle-button-size: 40px;
-        }
-
-        /* 暗黑模式的 CSS 變量 */
-        body.dark-theme {
-            --primary-color: #3A8DFF; /* 保持一致 */
-            --background-color: #1A1A1A; /* 深灰色 */
-            --text-color: #CCCCCC; /* 淺灰色 */
-            --header-background: rgba(26, 26, 26, 0.95);
-            --section-background: #1E1E1E;
-            --section-text-color: #CCCCCC;
-            --button-background: #3A8DFF;
-            --button-text-color: #121212;
-            --button-hover-bg: #2B7FFF;
-            --overlay-color: rgba(58, 141, 255, 0.2);
-            --footer-background: #1E1E1E;
-            --footer-text-color: #CCCCCC;
-        }
-
-        /* 基本重置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* 字體設置 */
-        body {
-            font-family: 'Roboto', sans-serif;
-            color: var(--text-color);
-            background-color: var(--background-color);
-            line-height: 1.6;
-            transition: background-color 0.5s, color 0.5s;
-        }
-
-        /* 頂部導航 */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--header-background);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 1000;
-            transition: background 0.3s;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px 20px;
-        }
-
-        .logo {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.5em;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        nav {
-            position: relative;
-        }
-
-        /* 漢堡菜單按鈕 */
-        .nav-toggle {
-            display: block;
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        .nav-toggle:focus {
-            outline: none;
-        }
-
-        /* 隱藏的側邊導航欄 */
-        .side-nav {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1001;
-            top: 0;
-            left: 0;
-            background-color: var(--header-background);
-            overflow-x: hidden;
-            transition: 0.3s;
-            padding-top: 60px; /* 頂部導航高度 */
-        }
-
-        .side-nav.active {
-            width: 250px;
-        }
-
-        .side-nav a {
-            padding: 10px 20px;
-            text-decoration: none;
-            font-size: 1.2em;
-            color: var(--text-color);
-            display: block;
-            transition: color 0.3s;
-        }
-
-        .side-nav a:hover {
-            color: var(--primary-color);
-        }
-
-        /* 關閉側邊導航欄的按鈕 */
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 2em;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        /* 主題切換開關樣式 */
-        .theme-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-            margin: 10px auto;
-        }
-
-        .theme-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .theme-switch .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: 0.4s;
-            border-radius: 34px;
-        }
-
-        .theme-switch .slider::before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.4s;
-            border-radius: 50%;
-        }
-
-        .theme-switch input:checked + .slider {
-            background-color: var(--primary-color);
-        }
-
-        .theme-switch input:checked + .slider::before {
-            transform: translateX(26px);
-        }
-
-        /* 英雄區域 */
-        .hero {
-            background: linear-gradient(to bottom right, var(--primary-color), #00C6FF), url('background.png') no-repeat center center/cover;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding: 70px 20px 20px 20px; /* 為固定導航欄預留空間 */
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--overlay-color);
-            z-index: 1;
-            transition: background 0.3s;
-        }
-
-        .hero-content {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 1000px;
-            width: 100%;
-            z-index: 2;
-            background: rgba(58, 141, 255, 0.8); /* 半透明主色 */
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            transition: background 0.3s;
-            animation: fadeIn 1s forwards;
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-photo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            object-fit: cover;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-            transition: margin 0.3s;
-        }
-
-        .hero-text {
-            max-width: 100%;
-            color: #fff;
-            text-align: center;
-        }
-
-        .hero-text h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2em;
-            margin-bottom: 15px;
-            line-height: 1.2;
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-text p {
-            font-size: 1em;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            color: #f1f1f1;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: var(--button-background);
-            color: var(--button-text-color);
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: background-color 0.3s, color 0.3s;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            font-size: 1em;
-        }
-
-        .cta-button img {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-        }
-
-        .cta-button:hover {
-            background-color: var(--button-hover-bg);
-            color: var(--button-hover-text);
-        }
-
-        /* 關於我 */
-        #about {
-            background-color: var(--section-background);
-            padding: 40px 20px;
-            max-width: 800px;
-            margin: 40px auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            transition: background-color 0.5s, color 0.5s;
-        }
-
-        #about h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2em;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        #about p {
-            font-size: 1em;
-            color: var(--section-text-color);
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        /* 技術庫 */
-        #tech-stack {
-            background-color: var(--section-background);
-            padding: 40px 20px;
-            max-width: 800px;
-            margin: 40px auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            transition: background-color 0.5s, color 0.5s;
-        }
-
-        #tech-stack h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2em;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 20px;
-            justify-items: center;
-        }
-
-        .tech-item {
-            background-color: #fff;
-            border: 1px solid #eaeaea;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .tech-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-
-        .tech-item i {
-            font-size: 2em;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .tech-item span {
-            display: block;
-            margin-top: 5px;
-            font-weight: 600;
-            color: var(--text-color);
-            font-size: 1em;
-        }
-
-        /* 我的專案 */
-        #projects {
-            background-color: var(--section-background);
-            padding: 40px 20px;
-            max-width: 800px;
-            margin: 40px auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            transition: background-color 0.5s, color 0.5s;
-        }
-
-        #projects h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2em;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            justify-items: center;
-        }
-
-        .project-item {
-            background-color: #fff;
-            border: 1px solid #eaeaea;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .project-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-
-        .project-item i {
-            font-size: 2em;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .project-item h3 {
-            font-size: 1.2em;
-            color: var(--text-color);
-            margin-bottom: 10px;
-        }
-
-        .project-item p {
-            font-size: 0.9em;
-            color: var(--section-text-color);
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .project-item a {
-            display: inline-block;
-            margin-top: 10px;
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: 600;
-            transition: color 0.3s;
-            font-size: 1em;
-        }
-
-        .project-item a:hover {
-            color: var(--button-hover-bg);
-        }
-
-        /* 聯絡我欄目 */
-        #contact {
-            background-color: var(--section-background);
-            padding: 40px 20px;
-            max-width: 800px;
-            margin: 40px auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            transition: background-color 0.5s, color 0.5s;
-        }
-
-        #contact h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2em;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .contact-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            background-color: #fff;
-            border: 1px solid #eaeaea;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-        }
-
-        .contact-links a:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            background-color: var(--overlay-color);
-        }
-
-        .contact-links svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--primary-color);
-            transition: fill 0.3s;
-        }
-
-        .contact-links a:hover svg {
-            fill: #FFFFFF;
-        }
-
-        /* 底部資訊 */
-        footer {
-            background-color: var(--footer-background);
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid #eaeaea;
-            box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
-            border-radius: 0 0 10px 10px;
-            margin-top: 40px;
-            transition: background-color 0.5s, color 0.5s;
-        }
-
-        footer p {
-            margin-bottom: 15px;
-            color: var(--footer-text-color);
-            font-size: 0.9em;
-        }
-
-        footer .credits {
-            color: var(--footer-text-color);
-            font-size: 0.8em;
-        }
-
-        /* 平滑滾動 */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* 響應式設計（針對移動設備進一步優化） */
-        @media (min-width: 769px) {
-            /* 如果需要，這裡可以添加針對更大屏幕的樣式 */
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harrison 的個人網站</title>
+  <meta name="description" content="Harrison 的個人網站，展示他的技術能力、專案經驗以及對 C++ 的熱情。" />
+  <meta name="keywords" content="Harrison, 個人網站, 軟體開發, C++, 技術庫, 專案展示" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto&display=swap" rel="stylesheet" />
+  <!-- Devicon 與 Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    /* 統一配色：綠色與白色主題 */
+    :root {
+      --primary-color: #28a745;  /* 主色綠 */
+      --background-color: #ffffff; /* 白色背景 */
+      --text-color: #333333;
+      --header-background: #ffffff;
+      --section-background: #ffffff;
+      --section-text-color: #555555;
+      --button-background: var(--primary-color);
+      --button-text-color: #ffffff;
+      --button-hover-bg: #218838; /* 深綠 */
+      --overlay-color: rgba(40, 167, 69, 0.2);
+      --footer-background: #ffffff;
+      --footer-text-color: #777777;
+    }
+    /* 暗黑模式（可按需要擴充） */
+    body.dark-theme {
+      --background-color: #1A1A1A;
+      --text-color: #CCCCCC;
+      --header-background: #1A1A1A;
+      --section-background: #1E1E1E;
+      --section-text-color: #CCCCCC;
+      --footer-background: #1E1E1E;
+      --footer-text-color: #CCCCCC;
+    }
+
+    /* 重置與基本字型 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      transition: background-color 0.5s, color 0.5s;
+      scroll-behavior: smooth;
+    }
+
+    /* 頂部區塊：僅保留 logo 與展開側邊導航的漢堡按鈕 */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--header-background);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 1000;
+      transition: background 0.3s;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+    }
+    .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8em;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    /* 漢堡按鈕（全裝置皆顯示） */
+    .nav-toggle {
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: var(--text-color);
+    }
+
+    /* 移動版側邊導航欄 */
+    .side-nav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1001;
+      top: 0;
+      left: 0;
+      background-color: var(--header-background);
+      overflow-x: hidden;
+      transition: width 0.3s;
+      padding-top: 60px; /* 固定導航高度 */
+    }
+    .side-nav.active {
+      width: 250px;
+    }
+    .side-nav a {
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 1.2em;
+      color: var(--text-color);
+      display: block;
+      transition: color 0.3s;
+    }
+    .side-nav a:hover {
+      color: var(--primary-color);
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 2em;
+      cursor: pointer;
+      color: var(--text-color);
+    }
+
+    /* 主題切換按鈕 */
+    .theme-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .theme-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .theme-switch .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+    .theme-switch .slider::before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    .theme-switch input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+    .theme-switch input:checked + .slider::before {
+      transform: translateX(26px);
+    }
+
+    /* 英雄區域 */
+    .hero {
+      background: linear-gradient(to bottom right, var(--primary-color), #a8e6a1), url('background.png') no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 70px; /* 預留固定導航高度 */
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--overlay-color);
+      z-index: 1;
+      transition: background 0.3s;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 1000px;
+      width: 90%;
+      background: rgba(40,167,69,0.8);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      animation: fadeIn 1s forwards;
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-photo {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 5px solid #fff;
+      object-fit: cover;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .hero-text {
+      text-align: center;
+      color: #fff;
+    }
+    .hero-text h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3em;
+      margin-bottom: 15px;
+      line-height: 1.2;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .hero-text p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      padding: 12px 25px;
+      background-color: var(--button-background);
+      color: var(--button-text-color);
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: background-color 0.3s, color 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      font-size: 1em;
+    }
+    .cta-button img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+    .cta-button:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    /* 各區塊（關於我、技術庫、專案、聯絡我） */
+    section {
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 100px auto 40px;
+      background-color: var(--section-background);
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transition: background-color 0.5s, color 0.5s;
+      text-align: center;
+    }
+    section h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2em;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    section p {
+      font-size: 1em;
+      color: var(--section-text-color);
+      line-height: 1.6;
+    }
+
+    /* 技術庫網格 */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+    .tech-item {
+      background-color: #fff;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+      padding: 15px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .tech-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    .tech-item i {
+      font-size: 2em;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    .tech-item span {
+      display: block;
+      margin-top: 5px;
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: 1em;
+    }
+
+    /* 專案網格 */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      justify-items: center;
+    }
+    .project-item {
+      background-color: #fff;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+      padding: 15px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .project-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    .project-item i {
+      font-size: 2em;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    .project-item h3 {
+      font-size: 1.2em;
+      color: var(--text-color);
+      margin-bottom: 10px;
+    }
+    .project-item p {
+      font-size: 0.9em;
+      color: var(--section-text-color);
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+    .project-item a {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: var(--primary-color);
+      font-weight: 600;
+      transition: color 0.3s;
+      font-size: 1em;
+    }
+    .project-item a:hover {
+      color: var(--button-hover-bg);
+    }
+
+    /* 聯絡我 */
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .contact-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background-color: #fff;
+      border: 1px solid #eaeaea;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+    }
+    .contact-links a:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      background-color: var(--overlay-color);
+    }
+    .contact-links svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--primary-color);
+      transition: fill 0.3s;
+    }
+    .contact-links a:hover svg {
+      fill: #FFFFFF;
+    }
+
+    /* 底部資訊 */
+    footer {
+      background-color: var(--footer-background);
+      padding: 20px;
+      text-align: center;
+      border-top: 1px solid #eaeaea;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+      border-radius: 0 0 10px 10px;
+      margin-top: 40px;
+      transition: background-color 0.5s, color 0.5s;
+    }
+    footer p {
+      margin-bottom: 15px;
+      color: var(--footer-text-color);
+      font-size: 0.9em;
+    }
+    footer .credits {
+      color: var(--footer-text-color);
+      font-size: 0.8em;
+    }
+
+    /* 返回頂部按鈕 */
+    #back-to-top {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1001;
+      transition: background-color 0.3s;
+    }
+    #back-to-top:hover {
+      background-color: var(--button-hover-bg);
+    }
+  </style>
 </head>
 <body>
-    <!-- 頂部導航 -->
-    <header>
-        <div class="nav-container">
-            <div class="logo">Harrison</div>
-            <nav>
-                <button class="nav-toggle" aria-label="開啟導航菜單" aria-expanded="false">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </nav>
-        </div>
-        <!-- 側邊導航欄 -->
-        <div id="side-nav" class="side-nav" aria-hidden="true">
-            <span class="close-btn" aria-label="關閉導航菜單">&times;</span>
-            <a href="#about">關於我</a>
-            <a href="#tech-stack">技術庫</a>
-            <a href="#projects">我的專案</a>
-            <a href="#contact">聯絡我</a> <!-- 新增聯絡我連結 -->
-            <!-- 添加主題切換開關 -->
-            <div style="padding: 10px 20px;">
-                <label class="theme-switch" aria-label="切換主題">
-                    <input type="checkbox" id="theme-toggle" aria-checked="false">
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </div>
-    </header>
+  <!-- 頂部區塊（僅含 logo 與展開側邊導航的按鈕） -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">Harrison</div>
+      <button class="nav-toggle" aria-label="開啟導航菜單" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    <!-- 移動版側邊導航欄 -->
+    <div id="side-nav" class="side-nav" aria-hidden="true">
+      <span class="close-btn" aria-label="關閉導航菜單">&times;</span>
+      <a href="#about">關於我</a>
+      <a href="#tech-stack">技術庫</a>
+      <a href="#projects">我的專案</a>
+      <a href="#contact">聯絡我</a>
+      <!-- 主題切換 -->
+      <div style="padding: 10px 20px;">
+        <label class="theme-switch" aria-label="切換主題">
+          <input type="checkbox" id="theme-toggle-mobile" aria-checked="false">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </header>
 
-    <!-- 英雄區域 -->
-    <section class="hero">
-        <div class="hero-content">
-            <img src="profile.png" alt="Harrison 的照片" class="hero-photo" loading="lazy">
-            <div class="hero-text">
-                <h1>你好，我是 Harrison</h1>
-                <p>一名熱愛編碼的軟體開發者，致力於創造高效且易用的應用程序。</p>
-                <a href="https://github.com/hrs-y" class="cta-button" target="_blank" rel="noopener noreferrer">
-                    <img src="github.png" alt="GitHub" /> View My Github
-                </a>
-            </div>
-        </div>
-    </section>
+  <!-- 英雄區域 -->
+  <section class="hero">
+    <div class="hero-content">
+      <img src="profile.png" alt="Harrison 的照片" class="hero-photo" loading="lazy">
+      <div class="hero-text">
+        <h1>你好，我是 Harrison</h1>
+        <p>一名熱愛編碼的軟體開發者，致力於創造高效且易用的應用程序。</p>
+        <a href="https://github.com/hrs-y" class="cta-button" target="_blank" rel="noopener noreferrer">
+          <img src="github.png" alt="GitHub"> View My Github
+        </a>
+      </div>
+    </div>
+  </section>
 
-    <!-- 關於我 -->
-    <section id="about">
-        <h2>關於我</h2>
-        <p>
-            你好！我是 Harrison，一名熱愛編程的開發者，專注於 C++，並不斷探索更高效、更優雅的程式設計方式。我對底層技術、演算法和高性能計算特別感興趣，享受解決複雜問題的挑戰。
-            <br><br>
-            目前，我正在開發個人網站，希望透過這個平台分享我的專案、技術學習心得，並與更多對程式設計有熱情的開發者交流。我熱愛研究 C++ 的最佳實踐，包括記憶體管理、多執行緒編程、STL 和設計模式，並持續學習更現代的 C++ 技術。
-            <br><br>
-            除了編碼，我也喜歡探索新技術、參與開源專案，或是挑戰競程題目來鍛煉邏輯思維。如果你對 C++ 或程式開發有興趣，歡迎與我交流，一起成長進步！🚀
-        </p>
-    </section>
+  <!-- 關於我 -->
+  <section id="about">
+    <h2>關於我</h2>
+    <p>
+      你好！我是 Harrison，一名熱愛編程的開發者，專注於 C++，並不斷探索更高效、更優雅的程式設計方式。我對底層技術、演算法和高性能計算特別感興趣，享受解決複雜問題的挑戰。<br><br>
+      目前，我正在開發個人網站，希望透過這個平台分享我的專案、技術學習心得，並與更多對程式設計有熱情的開發者交流。我熱愛研究 C++ 的最佳實踐，包括記憶體管理、多執行緒編程、STL 和設計模式，並持續學習更現代的 C++ 技術。<br><br>
+      除了編碼，我也喜歡探索新技術、參與開源專案，或是挑戰競程題目來鍛煉邏輯思維。如果你對 C++ 或程式開發有興趣，歡迎與我交流，一起成長進步！🚀
+    </p>
+  </section>
 
-    <!-- 技術庫 -->
-    <section id="tech-stack">
-        <h2>我的技術庫</h2>
-        <div class="tech-grid">
-            <div class="tech-item">
-                <i class="devicon-cplusplus-plain colored" title="C++"></i>
-                <span>C++</span>
-            </div>
-            <div class="tech-item">
-                <i class="devicon-html5-plain colored" title="HTML5"></i>
-                <span>HTML5</span>
-            </div>
-            <div class="tech-item">
-                <i class="devicon-java-plain colored" title="Java"></i>
-                <span>Java</span>
-            </div>
-            <div class="tech-item">
-                <i class="devicon-javascript-plain colored" title="JavaScript"></i>
-                <span>JavaScript</span>
-            </div>
-            <div class="tech-item">
-                <i class="devicon-python-plain colored" title="Python"></i>
-                <span>Python</span>
-            </div>
-            <!-- 可根據需要添加更多技術 -->
-        </div>
-    </section>
+  <!-- 技術庫 -->
+  <section id="tech-stack">
+    <h2>我的技術庫</h2>
+    <div class="tech-grid">
+      <div class="tech-item">
+        <i class="devicon-cplusplus-plain colored" title="C++"></i>
+        <span>C++</span>
+      </div>
+      <div class="tech-item">
+        <i class="devicon-html5-plain colored" title="HTML5"></i>
+        <span>HTML5</span>
+      </div>
+      <div class="tech-item">
+        <i class="devicon-java-plain colored" title="Java"></i>
+        <span>Java</span>
+      </div>
+      <div class="tech-item">
+        <i class="devicon-javascript-plain colored" title="JavaScript"></i>
+        <span>JavaScript</span>
+      </div>
+      <div class="tech-item">
+        <i class="devicon-python-plain colored" title="Python"></i>
+        <span>Python</span>
+      </div>
+    </div>
+  </section>
 
-    <!-- 我的專案 -->
-    <section id="projects">
-        <h2>我的專案</h2>
-        <div class="projects-grid">
-            <!-- 個人網站專案 -->
-            <div class="project-item">
-                <i class="devicon-html5-plain colored" title="個人網站"></i>
-                <h3>個人網站</h3>
-                <p>這是我目前正在使用的個人網站，展示我的技術能力和專案經驗。</p>
-                <a href="https://github.com/hrs-y" target="_blank" rel="noopener noreferrer">查看專案</a>
-            </div>
-            <!-- 我的Blog專案 -->
-            <div class="project-item">
-                <i class="devicon-blogger-plain colored" title="Blog"></i>
-                <h3>我的Blog</h3>
-                <p>我的個人博客正在開發中，將分享我的技術學習心得和開發經驗。</p>
-                <a href="#" target="_blank" rel="noopener noreferrer">正在開發中</a>
-            </div>
-            <!-- 我的Windows APP專案 -->
-            <div class="project-item">
-                <i class="devicon-csharp-plain colored" title="C#"></i>
-                <h3>我的Windows APP</h3>
-                <p>我正在尋找靈感，計劃開發一款有趣且實用的 Windows 應用程序。</p>
-                <a href="#" target="_blank" rel="noopener noreferrer">正在找靈感</a>
-            </div>
-        </div>
-    </section>
+  <!-- 我的專案 -->
+  <section id="projects">
+    <h2>我的專案</h2>
+    <div class="projects-grid">
+      <!-- 個人網站專案 -->
+      <div class="project-item">
+        <i class="devicon-html5-plain colored" title="個人網站"></i>
+        <h3>個人網站</h3>
+        <p>這是我目前正在使用的個人網站，展示我的技術能力和專案經驗。</p>
+        <a href="https://github.com/hrs-y" target="_blank" rel="noopener noreferrer">查看專案</a>
+      </div>
+      <!-- 我的Blog專案 -->
+      <div class="project-item">
+        <i class="devicon-blogger-plain colored" title="Blog"></i>
+        <h3>我的Blog</h3>
+        <p>我的個人博客正在開發中，將分享我的技術學習心得和開發經驗。</p>
+        <a href="#" target="_blank" rel="noopener noreferrer">正在開發中</a>
+      </div>
+      <!-- 我的Windows APP專案 -->
+      <div class="project-item">
+        <i class="devicon-csharp-plain colored" title="C#"></i>
+        <h3>我的Windows APP</h3>
+        <p>我正在尋找靈感，計劃開發一款有趣且實用的 Windows 應用程序。</p>
+        <a href="#" target="_blank" rel="noopener noreferrer">正在找靈感</a>
+      </div>
+    </div>
+  </section>
 
-    <!-- 聯絡我欄目 -->
-    <section id="contact">
-        <h2>聯絡我</h2>
-        <div class="contact-links">
-            <a href="https://github.com/hrs-y" target="_blank" rel="noopener noreferrer" aria-label="訪問我的 GitHub">
-                <!-- GitHub SVG 圖標 -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color)" aria-hidden="true">
-                    <path d="M12 0C5.372 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 
-                    0-.285-.01-1.04-.015-2.04-3.338.725-4.042-1.61-4.042-1.61C4.422 17.07 3.633 16.7 3.633 16.7c-1.087-.744 
-                    .083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.76-1.605-2.665-.305-5.467-1.333-5.467-5.933 
-                    0-1.31.468-2.381 1.235-3.221-.135-.303-.54-1.523.105-3.176 
-                    0 0 1.005-.322 3.3 1.23a11.5 11.5 0 013.003-.404c1.02.005 2.045.138 3.003.404 
-                    2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.77.84 1.23 1.911 1.23 3.221 
-                    0 4.61-2.805 5.625-5.475 5.92.43.37.81 1.102.81 2.222 
-                    0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.796 24 17.303 
-                    24 12c0-6.627-5.373-12-12-12z"/>
-                </svg>
-            </a>
-            <a href="https://x.com/HarrisonHao_" target="_blank" rel="noopener noreferrer" aria-label="訪問我的 X (Twitter)">
-                <!-- X (Twitter) SVG 圖標 -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color)" aria-hidden="true">
-                    <path d="M23.954 4.569c-.885.392-1.83.656-2.825.775 
-                    1.014-.611 1.794-1.574 2.163-2.723-.949.555-2.005.959-3.127 
-                    1.184-.897-.957-2.178-1.555-3.594-1.555-2.717 
-                    0-4.92 2.203-4.92 4.917 0 .39.045.765.127 
-                    1.124-4.087-.205-7.713-2.165-10.141-5.144-.423.722-.666 
-                    1.561-.666 2.475 0 1.71.87 3.213 2.188 
-                    4.096-.807-.026-1.566-.248-2.229-.616v.061c0 2.385 
-                    1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 
-                    0-.615-.03-.916-.086.631 1.953 2.445 3.377 
-                    4.6 3.419-1.68 1.319-3.809 2.105-6.102 
-                    2.105-.39 0-.779-.023-1.17-.067 
-                    2.179 1.397 4.768 2.209 7.557 2.209 
-                    9.054 0 14-7.496 14-13.986 0-.21 0-.42-.015-.63.961-.689 
-                    1.8-1.56 2.46-2.548l-.047-.02z"/>
-                </svg>
-            </a>
-            <a href="https://www.linkedin.com/in/harrison-hao-30607134a/" target="_blank" rel="noopener noreferrer" aria-label="訪問我的 LinkedIn">
-                <!-- LinkedIn SVG 圖標 -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color)" aria-hidden="true">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 
-                    2.239 5 5 5h14c2.761 0 5-2.239 
-                    5-5v-14c0-2.761-2.239-5-5-5zm-11 
-                    19h-3v-10h3v10zm-1.5-11.268c-.966 
-                    0-1.75-.784-1.75-1.75s.784-1.75 
-                    1.75-1.75 1.75.784 1.75 
-                    1.75-.784 1.75-1.75 
-                    1.75zm13.5 11.268h-3v-5.604c0-1.337-.027-3.063-1.868-3.063-1.869 
-                    0-2.155 1.458-2.155 
-                    2.96v5.705h-3v-10h2.881v1.367h.041c.401-.76 
-                    1.381-1.561 2.841-1.561 3.041 0 
-                    3.6 2.0 3.6 4.607v5.589z"/>
-                </svg>
-            </a>
-        </div>
-    </section>
+  <!-- 聯絡我 -->
+  <section id="contact">
+    <h2>聯絡我</h2>
+    <div class="contact-links">
+      <a href="https://github.com/hrs-y" target="_blank" rel="noopener noreferrer" aria-label="訪問我的 GitHub">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color)" aria-hidden="true">
+          <path d="M12 0C5.372 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 
+          0-.285-.01-1.04-.015-2.04-3.338.725-4.042-1.61-4.042-1.61C4.422 17.07 3.633 16.7 3.633 16.7c-1.087-.744 
+          .083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.834 2.809 1.304 3.495.997.108-.775.418-1.305.76-1.605-2.665-.305-5.467-1.333-5.467-5.933 
+          0-1.31.468-2.381 1.235-3.221-.135-.303-.54-1.523.105-3.176 
+          0 0 1.005-.322 3.3 1.23a11.5 11.5 0 013.003-.404c1.02.005 2.045.138 3.003.404 
+          2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.77.84 1.23 1.911 1.23 3.221 
+          0 4.61-2.805 5.625-5.475 5.92.43.37.81 1.102.81 2.222 
+          0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.796 24 17.303 
+          24 12c0-6.627-5.373-12-12-12z"/>
+        </svg>
+      </a>
+      <a href="https://x.com/HarrisonHao_" target="_blank" rel="noopener noreferrer" aria-label="訪問我的 X (Twitter)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color)" aria-hidden="true">
+          <path d="M23.954 4.569c-.885.392-1.83.656-2.825.775 
+          1.014-.611 1.794-1.574 2.163-2.723-.949.555-2.005.959-3.127 
+          1.184-.897-.957-2.178-1.555-3.594-1.555-2.717 
+          0-4.92 2.203-4.92 4.917 0 .39.045.765.127 
+          1.124-4.087-.205-7.713-2.165-10.141-5.144-.423.722-.666 
+          1.561-.666 2.475 0 1.71.87 3.213 2.188 
+          4.096-.807-.026-1.566-.248-2.229-.616v.061c0 2.385 
+          1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 
+          0-.615-.03-.916-.086.631 1.953 2.445 3.377 
+          4.6 3.419-1.68 1.319-3.809 2.105-6.102 
+          2.105-.39 0-.779-.023-1.17-.067 
+          2.179 1.397 4.768 2.209 7.557 2.209 
+          9.054 0 14-7.496 14-13.986 0-.21 0-.42-.015-.63.961-.689 
+          1.8-1.56 2.46-2.548l-.047-.02z"/>
+        </svg>
+      </a>
+    </div>
+  </section>
 
-    <!-- 底部資訊 -->
-    <footer>
-        <p>© 2025 Harrison. All rights reserved.</p>
-        <p class="credits">*本頁面由Harrison和ChatGPT呈現</p>
-    </footer>
+  <!-- 底部資訊 -->
+  <footer>
+    <p>© 2025 Harrison. All rights reserved.</p>
+    <p class="credits">*本頁面由 Harrison 和 ChatGPT 呈現</p>
+  </footer>
 
-    <!-- 更新後的 JavaScript for Theme Toggle 和 漢堡菜單 -->
-    <script>
-        // 主題切換功能
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
+  <!-- 返回頂部按鈕 -->
+  <button id="back-to-top" aria-label="回到頂部">
+    <i class="fas fa-chevron-up"></i>
+  </button>
 
-        // 檢查是否有已保存的主題偏好
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark-theme') {
-            body.classList.add('dark-theme');
-            themeToggle.checked = true;
-            themeToggle.setAttribute('aria-checked', 'true');
-        } else {
-            body.classList.remove('dark-theme');
-            themeToggle.checked = false;
-            themeToggle.setAttribute('aria-checked', 'false');
+  <script>
+    /* 主題切換：桌面與移動同步 */
+    function setTheme(toggleElement) {
+      if (toggleElement.checked) {
+        document.body.classList.add('dark-theme');
+        localStorage.setItem('theme', 'dark-theme');
+        toggleElement.setAttribute('aria-checked', 'true');
+      } else {
+        document.body.classList.remove('dark-theme');
+        localStorage.removeItem('theme');
+        toggleElement.setAttribute('aria-checked', 'false');
+      }
+    }
+    const themeToggleDesktop = document.getElementById('theme-toggle');
+    const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark-theme') {
+      document.body.classList.add('dark-theme');
+      if (themeToggleDesktop) {
+        themeToggleDesktop.checked = true;
+        themeToggleDesktop.setAttribute('aria-checked', 'true');
+      }
+      if (themeToggleMobile) {
+        themeToggleMobile.checked = true;
+        themeToggleMobile.setAttribute('aria-checked', 'true');
+      }
+    }
+    if (themeToggleDesktop) {
+      themeToggleDesktop.addEventListener('change', () => {
+        setTheme(themeToggleDesktop);
+        if (themeToggleMobile) {
+          themeToggleMobile.checked = themeToggleDesktop.checked;
+          themeToggleMobile.setAttribute('aria-checked', themeToggleDesktop.getAttribute('aria-checked'));
         }
+      });
+    }
+    if (themeToggleMobile) {
+      themeToggleMobile.addEventListener('change', () => {
+        setTheme(themeToggleMobile);
+        if (themeToggleDesktop) {
+          themeToggleDesktop.checked = themeToggleMobile.checked;
+          themeToggleDesktop.setAttribute('aria-checked', themeToggleMobile.getAttribute('aria-checked'));
+        }
+      });
+    }
 
-        themeToggle.addEventListener('change', () => {
-            if (themeToggle.checked) {
-                body.classList.add('dark-theme');
-                localStorage.setItem('theme', 'dark-theme');
-                themeToggle.setAttribute('aria-checked', 'true');
-            } else {
-                body.classList.remove('dark-theme');
-                localStorage.removeItem('theme');
-                themeToggle.setAttribute('aria-checked', 'false');
-            }
-        });
+    /* 漢堡按鈕觸發側邊導航展開 */
+    const navToggle = document.querySelector('.nav-toggle');
+    const sideNav = document.getElementById('side-nav');
+    const closeBtn = document.querySelector('.close-btn');
+    navToggle.addEventListener('click', () => {
+      sideNav.classList.toggle('active');
+      const expanded = sideNav.classList.contains('active');
+      navToggle.setAttribute('aria-expanded', expanded);
+      sideNav.setAttribute('aria-hidden', !expanded);
+    });
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        sideNav.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+        sideNav.setAttribute('aria-hidden', 'true');
+      });
+    }
 
-        // 漢堡菜單功能
-        const navToggle = document.querySelector('.nav-toggle');
-        const sideNav = document.getElementById('side-nav');
-        const closeBtn = document.querySelector('.close-btn');
+    /* 返回頂部按鈕 */
+    const backToTopBtn = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopBtn.style.display = 'flex';
+      } else {
+        backToTopBtn.style.display = 'none';
+      }
+    });
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
-        navToggle.addEventListener('click', () => {
-            sideNav.classList.toggle('active');
-            const expanded = sideNav.classList.contains('active');
-            navToggle.setAttribute('aria-expanded', expanded);
-            sideNav.setAttribute('aria-hidden', !expanded);
-        });
-
-        closeBtn.addEventListener('click', () => {
-            sideNav.classList.remove('active');
-            navToggle.setAttribute('aria-expanded', 'false');
-            sideNav.setAttribute('aria-hidden', 'true');
-        });
-
-        // 點擊導航連結後自動關閉側邊導航
-        const navLinks = document.querySelectorAll('.side-nav a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (sideNav.classList.contains('active')) {
-                    sideNav.classList.remove('active');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                    sideNav.setAttribute('aria-hidden', 'true');
-                }
-            });
-        });
-    </script>
+    /* 導覽連結：點擊後平滑滾動至目標區塊，並在移動版隱藏側邊導航 */
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (link.getAttribute('href') === "#") return;
+        e.preventDefault();
+        const targetId = link.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (window.innerWidth <= 768) {
+          sideNav.classList.remove('active');
+          navToggle.setAttribute('aria-expanded', 'false');
+          sideNav.setAttribute('aria-hidden', 'true');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
+
