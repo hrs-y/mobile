@@ -29,7 +29,6 @@
       --footer-background: #ffffff;
       --footer-text-color: #777777;
     }
-    /* 暗黑模式（可按需要擴充） */
     body.dark-theme {
       --background-color: #1A1A1A;
       --text-color: #CCCCCC;
@@ -41,11 +40,7 @@
     }
 
     /* 重置與基本字型 */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Roboto', sans-serif;
       background-color: var(--background-color);
@@ -55,7 +50,7 @@
       scroll-behavior: smooth;
     }
 
-    /* 頂部區塊：僅保留 logo 與展開側邊導航的漢堡按鈕 */
+    /* 頂部區塊：logo 與側邊導航開關 */
     header {
       position: fixed;
       top: 0;
@@ -63,10 +58,10 @@
       background: var(--header-background);
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       z-index: 1000;
-      transition: background 0.3s;
       padding: 15px 20px;
       display: flex;
       align-items: center;
+      transition: background 0.3s;
     }
     .logo {
       font-family: 'Montserrat', sans-serif;
@@ -83,7 +78,6 @@
       cursor: pointer;
       color: var(--text-color);
     }
-
     /* 移動版側邊導航欄 */
     .side-nav {
       height: 100%;
@@ -236,7 +230,7 @@
       text-decoration: none;
       border-radius: 30px;
       font-weight: 600;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s, transform 0.3s;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       font-size: 1em;
     }
@@ -249,7 +243,7 @@
       background-color: var(--button-hover-bg);
     }
 
-    /* 各區塊（關於我、技術庫、專案、聯絡我） */
+    /* 各區塊：關於我、技術庫、專案、聯絡我 */
     section {
       padding: 40px 20px;
       max-width: 800px;
@@ -272,6 +266,21 @@
       line-height: 1.6;
     }
 
+    /* 鍵入動畫：關於我部分 */
+    #about-text {
+      overflow: hidden;
+      white-space: pre-wrap;
+      border-right: 0.15em solid var(--primary-color);
+    }
+    @keyframes caret {
+      from, to { border-color: transparent; }
+      50% { border-color: var(--primary-color); }
+    }
+    #about-text.typing::after {
+      content: "";
+      animation: caret 0.75s step-end infinite;
+    }
+
     /* 技術庫網格 */
     .tech-grid {
       display: grid;
@@ -286,10 +295,19 @@
       padding: 15px;
       transition: transform 0.3s, box-shadow 0.3s;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateX(-100px);
     }
     .tech-item:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    .tech-item.animate {
+      animation: slideInLeft 0.8s ease forwards;
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-100px); }
+      to { opacity: 1; transform: translateX(0); }
     }
     .tech-item i {
       font-size: 2em;
@@ -304,55 +322,78 @@
       font-size: 1em;
     }
 
-    /* 專案網格 */
+    /* 專案網格 - 翻牌效果 */
     .projects-grid {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 20px;
+      grid-template-columns: 1fr;
       justify-items: center;
     }
-    .project-item {
-      background-color: #fff;
+    .project-card {
+      perspective: 1000px;
+      width: 100%;
+      max-width: 350px;
+      margin: 0 auto;
+      height: 200px;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+    /* 當翻轉時放大卡牌（scale 調整以適應移動版） */
+    .card-inner.is-flipped {
+      transform: rotateY(180deg) scale(1.1);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
       border: 1px solid #eaeaea;
       border-radius: 10px;
-      padding: 15px;
-      transition: transform 0.3s, box-shadow 0.3s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      padding: 10px;
+      overflow: hidden;
     }
-    .project-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    }
-    .project-item i {
-      font-size: 2em;
+    .card-front i {
+      font-size: 3em;
       color: var(--primary-color);
-      margin-bottom: 10px;
     }
-    .project-item h3 {
-      font-size: 1.2em;
-      color: var(--text-color);
-      margin-bottom: 10px;
-    }
-    .project-item p {
-      font-size: 0.9em;
-      color: var(--section-text-color);
-      margin-bottom: 15px;
-      line-height: 1.4;
-    }
-    .project-item a {
-      display: inline-block;
+    .card-front h3 {
       margin-top: 10px;
-      text-decoration: none;
+      font-size: 1.2em;
       color: var(--primary-color);
-      font-weight: 600;
-      transition: color 0.3s;
-      font-size: 1em;
     }
-    .project-item a:hover {
-      color: var(--button-hover-bg);
+    .card-back {
+      transform: rotateY(180deg);
+      text-align: center;
+      font-size: 0.9em;
+      line-height: 1.4;
+      color: var(--text-color);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .card-back h3 { margin-bottom: 5px; }
+    .card-back p { margin-bottom: 10px; }
+    .flip-back {
+      padding: 5px 10px;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.8em;
     }
 
-    /* 聯絡我 */
+    /* 聯絡我部分 */
     .contact-links {
       display: flex;
       justify-content: center;
@@ -383,7 +424,7 @@
       transition: fill 0.3s;
     }
     .contact-links a:hover svg {
-      fill: #FFFFFF;
+      fill: #ffffff;
     }
 
     /* 底部資訊 */
@@ -432,7 +473,7 @@
   </style>
 </head>
 <body>
-  <!-- 頂部區塊（僅含 logo 與展開側邊導航的按鈕） -->
+  <!-- 頂部區塊：logo 與側邊導航開關 -->
   <header>
     <div class="nav-container">
       <div class="logo">Harrison</div>
@@ -471,14 +512,10 @@
     </div>
   </section>
 
-  <!-- 關於我 -->
+  <!-- 關於我（鍵入動畫效果） -->
   <section id="about">
     <h2>關於我</h2>
-    <p>
-      你好！我是 Harrison，一名熱愛編程的開發者，專注於 C++，並不斷探索更高效、更優雅的程式設計方式。我對底層技術、演算法和高性能計算特別感興趣，享受解決複雜問題的挑戰。<br><br>
-      目前，我正在開發個人網站，希望透過這個平台分享我的專案、技術學習心得，並與更多對程式設計有熱情的開發者交流。我熱愛研究 C++ 的最佳實踐，包括記憶體管理、多執行緒編程、STL 和設計模式，並持續學習更現代的 C++ 技術。<br><br>
-      除了編碼，我也喜歡探索新技術、參與開源專案，或是挑戰競程題目來鍛煉邏輯思維。如果你對 C++ 或程式開發有興趣，歡迎與我交流，一起成長進步！🚀
-    </p>
+    <p id="about-text" class="typing"></p>
   </section>
 
   <!-- 技術庫 -->
@@ -508,30 +545,51 @@
     </div>
   </section>
 
-  <!-- 我的專案 -->
+  <!-- 我的專案（翻牌效果） -->
   <section id="projects">
     <h2>我的專案</h2>
     <div class="projects-grid">
       <!-- 個人網站專案 -->
-      <div class="project-item">
-        <i class="devicon-html5-plain colored" title="個人網站"></i>
-        <h3>個人網站</h3>
-        <p>這是我目前正在使用的個人網站，展示我的技術能力和專案經驗。</p>
-        <a href="https://github.com/hrs-y" target="_blank" rel="noopener noreferrer">查看專案</a>
+      <div class="project-card" data-title="個人網站" data-detail="這是我目前正在使用的個人網站，透過 HTML5 與 CSS3 實現多種動畫效果，搭配 JavaScript 交互設計。">
+        <div class="card-inner">
+          <div class="card-front">
+            <i class="devicon-html5-plain colored" title="個人網站"></i>
+            <h3>個人網站</h3>
+          </div>
+          <div class="card-back">
+            <h3>個人網站</h3>
+            <p>透過 HTML5、CSS3 及 JavaScript 展示我的技能與專案經驗，內容豐富且動態效果多樣。</p>
+            <button class="flip-back">返回</button>
+          </div>
+        </div>
       </div>
-      <!-- 我的Blog專案 -->
-      <div class="project-item">
-        <i class="devicon-blogger-plain colored" title="Blog"></i>
-        <h3>我的Blog</h3>
-        <p>我的個人博客正在開發中，將分享我的技術學習心得和開發經驗。</p>
-        <a href="#" target="_blank" rel="noopener noreferrer">正在開發中</a>
+      <!-- 我的 Blog 專案 -->
+      <div class="project-card" data-title="我的 Blog" data-detail="我的個人博客正在開發中，計劃分享技術學習心得與開發經驗，內容將涵蓋最新技術與實際應用。">
+        <div class="card-inner">
+          <div class="card-front">
+            <i class="devicon-wordpress-plain colored" title="Blog"></i>
+            <h3>我的 Blog</h3>
+          </div>
+          <div class="card-back">
+            <h3>我的 Blog</h3>
+            <p>分享技術心得與開發經驗，探索前沿技術與創新思維。</p>
+            <button class="flip-back">返回</button>
+          </div>
+        </div>
       </div>
-      <!-- 我的Windows APP專案 -->
-      <div class="project-item">
-        <i class="devicon-csharp-plain colored" title="C#"></i>
-        <h3>我的Windows APP</h3>
-        <p>我正在尋找靈感，計劃開發一款有趣且實用的 Windows 應用程序。</p>
-        <a href="#" target="_blank" rel="noopener noreferrer">正在找靈感</a>
+      <!-- 我的 Windows APP 專案 -->
+      <div class="project-card" data-title="我的 Windows APP" data-detail="我正在構思一款有趣且實用的 Windows 應用程序，專案正處於概念驗證階段，未來將加入更多創新功能。">
+        <div class="card-inner">
+          <div class="card-front">
+            <i class="devicon-csharp-plain colored" title="C#"></i>
+            <h3>我的 Windows APP</h3>
+          </div>
+          <div class="card-back">
+            <h3>我的 Windows APP</h3>
+            <p>專案正處於概念驗證階段，將不斷完善以實現更豐富的功能和更好的用戶體驗。</p>
+            <button class="flip-back">返回</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -652,34 +710,57 @@
     /* 返回頂部按鈕 */
     const backToTopBtn = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 300) {
-        backToTopBtn.style.display = 'flex';
-      } else {
-        backToTopBtn.style.display = 'none';
-      }
+      backToTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
     });
     backToTopBtn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    /* 導覽連結：點擊後平滑滾動至目標區塊，並在移動版隱藏側邊導航 */
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        if (link.getAttribute('href') === "#") return;
-        e.preventDefault();
-        const targetId = link.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth' });
+    /* 使用 IntersectionObserver 觸發技術庫項目的滑入動畫 */
+    const techItems = document.querySelectorAll('.tech-item');
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+          obs.unobserve(entry.target);
         }
-        if (window.innerWidth <= 768) {
-          sideNav.classList.remove('active');
-          navToggle.setAttribute('aria-expanded', 'false');
-          sideNav.setAttribute('aria-hidden', 'true');
+      });
+    }, { threshold: 0.5 });
+    techItems.forEach(item => observer.observe(item));
+
+    /* 關於我部分鍵入動畫 */
+    document.addEventListener('DOMContentLoaded', () => {
+      const aboutTextElement = document.getElementById('about-text');
+      const fullText = "你好！我是 Harrison，一名熱愛編程的開發者，專注於 C++ 並不斷探索更高效、更優雅的程式設計方式。\n\n我喜歡深入了解底層技術與演算法，無論是記憶體管理、多執行緒編程，還是最新的 C++ 標準，我都持續學習並實踐。\n\n此外，我熱衷於參與開源社區，分享我的學習心得和專案經驗。這個個人網站正是我的展示平台，期待與同樣熱愛技術的你交流與成長！";
+      let index = 0;
+      const speed = 50; // 每個字元的打字速度（毫秒）
+
+      function typeWriter() {
+        if (index < fullText.length) {
+          aboutTextElement.innerHTML += fullText.charAt(index);
+          index++;
+          setTimeout(typeWriter, speed);
+        } else {
+          aboutTextElement.classList.remove('typing');
         }
+      }
+      typeWriter();
+    });
+
+    /* 卡牌翻轉效果：點擊翻牌切換 */
+    document.querySelectorAll('.project-card .card-inner').forEach(card => {
+      card.addEventListener('click', function(e) {
+        // 若點擊的是返回按鈕則不觸發翻轉
+        if(e.target.classList.contains('flip-back')) return;
+        this.classList.toggle('is-flipped');
+      });
+    });
+    document.querySelectorAll('.flip-back').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        this.closest('.card-inner').classList.remove('is-flipped');
       });
     });
   </script>
 </body>
 </html>
-
