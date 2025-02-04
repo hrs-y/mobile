@@ -321,6 +321,19 @@
       color: var(--text-color);
       font-size: 1em;
     }
+    /* 移動設備下調整動畫偏移量 */
+    @media (max-width: 480px) {
+      .tech-item {
+        transform: translateX(-50px);
+      }
+      .tech-item.animate {
+        animation: slideInLeftMobile 0.8s ease forwards;
+      }
+    }
+    @keyframes slideInLeftMobile {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
 
     /* 專案網格 - 翻牌效果 */
     .projects-grid {
@@ -344,7 +357,6 @@
       transform-style: preserve-3d;
       cursor: pointer;
     }
-    /* 當翻轉時放大卡牌（scale 調整以適應移動版） */
     .card-inner.is-flipped {
       transform: rotateY(180deg) scale(1.1);
     }
@@ -656,36 +668,19 @@
         toggleElement.setAttribute('aria-checked', 'false');
       }
     }
-    const themeToggleDesktop = document.getElementById('theme-toggle');
+    // 此處僅處理移動版主題切換，若需要桌面版可另外添加對應元素
     const themeToggleMobile = document.getElementById('theme-toggle-mobile');
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark-theme') {
       document.body.classList.add('dark-theme');
-      if (themeToggleDesktop) {
-        themeToggleDesktop.checked = true;
-        themeToggleDesktop.setAttribute('aria-checked', 'true');
-      }
       if (themeToggleMobile) {
         themeToggleMobile.checked = true;
         themeToggleMobile.setAttribute('aria-checked', 'true');
       }
     }
-    if (themeToggleDesktop) {
-      themeToggleDesktop.addEventListener('change', () => {
-        setTheme(themeToggleDesktop);
-        if (themeToggleMobile) {
-          themeToggleMobile.checked = themeToggleDesktop.checked;
-          themeToggleMobile.setAttribute('aria-checked', themeToggleDesktop.getAttribute('aria-checked'));
-        }
-      });
-    }
     if (themeToggleMobile) {
       themeToggleMobile.addEventListener('change', () => {
         setTheme(themeToggleMobile);
-        if (themeToggleDesktop) {
-          themeToggleDesktop.checked = themeToggleMobile.checked;
-          themeToggleDesktop.setAttribute('aria-checked', themeToggleMobile.getAttribute('aria-checked'));
-        }
       });
     }
 
@@ -716,7 +711,8 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    /* 使用 IntersectionObserver 觸發技術庫項目的滑入動畫 */
+    /* 使用 IntersectionObserver 觸發技術庫項目的滑入動畫
+       將 threshold 降低到 0.3，以便移動設備上較小的可視區域也能觸發動畫 */
     const techItems = document.querySelectorAll('.tech-item');
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
@@ -725,7 +721,7 @@
           obs.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.3 });
     techItems.forEach(item => observer.observe(item));
 
     /* 關於我部分鍵入動畫 */
