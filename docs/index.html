@@ -482,6 +482,19 @@
     #back-to-top:hover {
       background-color: var(--button-hover-bg);
     }
+
+    /* 高亮動畫效果：側邊連結跳轉目標區塊時使用 */
+    @keyframes highlight {
+      0% {
+        background-color: rgba(40, 167, 69, 0.3);
+      }
+      100% {
+        background-color: transparent;
+      }
+    }
+    .highlight-animation {
+      animation: highlight 1s ease-out;
+    }
   </style>
 </head>
 <body>
@@ -711,8 +724,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    /* 使用 IntersectionObserver 觸發技術庫項目的滑入動畫
-       將 threshold 降低到 0.3，以便移動設備上較小的可視區域也能觸發動畫 */
+    /* 使用 IntersectionObserver 觸發技術庫項目的滑入動畫 */
     const techItems = document.querySelectorAll('.tech-item');
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
@@ -755,6 +767,36 @@
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
         this.closest('.card-inner').classList.remove('is-flipped');
+      });
+    });
+
+    /* 側邊欄連結點擊時添加目標區塊動畫效果 */
+    const sideNavLinks = document.querySelectorAll('.side-nav a');
+    sideNavLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();  // 攔截預設連結行為
+
+        // 取得目標區塊的 id（例如 "#about" 取 "about"）
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          // 添加高亮動畫類別
+          targetElement.classList.add('highlight-animation');
+          
+          // 平滑滾動到目標區塊
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+          
+          // 在動畫結束後移除類別（此處設定為1秒）
+          setTimeout(() => {
+            targetElement.classList.remove('highlight-animation');
+          }, 1000);
+        }
+        
+        // 點擊後自動關閉側邊欄
+        sideNav.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+        sideNav.setAttribute('aria-hidden', 'true');
       });
     });
   </script>
