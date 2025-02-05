@@ -243,7 +243,7 @@
       background-color: var(--button-hover-bg);
     }
 
-    /* 各區塊：關於我、技術庫、專案、聯絡我 */
+    /* 各區塊：區塊統一樣式 */
     section {
       padding: 40px 20px;
       max-width: 800px;
@@ -405,6 +405,58 @@
       font-size: 0.8em;
     }
 
+    /* 新增區塊：「我在聽」與「我的產品」 */
+    /* 我在聽區塊：以 Apple Music 播放器呈現 */
+    #music {
+      text-align: center;
+    }
+    #music h2 {
+      margin-bottom: 20px;
+    }
+    .music-player {
+      margin-bottom: 20px;
+    }
+    .music-player iframe {
+      width: 100%;
+      max-width: 660px;
+      height: 150px;
+      border: none;
+      background: transparent;
+    }
+    /* 我的產品區塊：包含產品說明、展開按鈕與隱藏產品列表 */
+    #products p {
+      margin-bottom: 15px;
+    }
+    #products button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: var(--button-background);
+      color: var(--button-text-color);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    #products button:hover {
+      background-color: var(--button-hover-bg);
+      transform: translateY(-3px);
+    }
+    #products-table-container {
+      margin-top: 20px;
+      display: none;
+    }
+    #products-table-container table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #products-table-container th,
+    #products-table-container td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
     /* 聯絡我部分 */
     .contact-links {
       display: flex;
@@ -510,8 +562,10 @@
     <div id="side-nav" class="side-nav" aria-hidden="true">
       <span class="close-btn" aria-label="關閉導航菜單">&times;</span>
       <a href="#about">關於我</a>
+      <a href="#music">我在聽</a>
       <a href="#tech-stack">技術庫</a>
       <a href="#projects">我的專案</a>
+      <a href="#products">我的產品</a>
       <a href="#contact">聯絡我</a>
       <!-- 主題切換 -->
       <div style="padding: 10px 20px;">
@@ -541,6 +595,21 @@
   <section id="about">
     <h2>關於我</h2>
     <p id="about-text" class="typing"></p>
+  </section>
+
+  <!-- 我在聽：嵌入 Apple Music 播放器 -->
+  <section id="music">
+    <h2>我在聽 <span style="font-size:0.8em; color: var(--section-text-color);">(Apple Music 提供播放器服務)</span></h2>
+    <p>以下是我近期喜歡的三首歌曲：</p>
+    <div class="music-player">
+      <iframe allow="autoplay *; encrypted-media *;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts" src="https://embed.music.apple.com/us/album/%E9%A3%9B%E6%A9%9F%E5%A0%B4%E7%9A%8410-30-live/917203187?i=917203192"></iframe>
+    </div>
+    <div class="music-player">
+      <iframe allow="autoplay *; encrypted-media *;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts" src="https://embed.music.apple.com/us/album/mothers-broom-from-kikis-delivery-service/1680459073?i=1680459428"></iframe>
+    </div>
+    <div class="music-player">
+      <iframe allow="autoplay *; encrypted-media *;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts" src="https://embed.music.apple.com/us/album/style/1440935467?i=1440935812"></iframe>
+    </div>
   </section>
 
   <!-- 技術庫 -->
@@ -619,6 +688,42 @@
     </div>
   </section>
 
+  <!-- 我的產品 -->
+  <section id="products">
+    <h2>我的產品</h2>
+    <p>
+      <strong>Harrison's 大語言模型API接入服務</strong><br>
+      我們提供一站式的 API 接入解決方案，助您快速整合各大語言模型。服務內容包括：
+    </p>
+    <ul style="text-align: left; margin: 0 auto 20px; max-width: 400px;">
+      <li>高性能、低延遲的接入體驗</li>
+      <li>安全、穩定且易於擴展的架構</li>
+      <li>支持主流語言模型產品</li>
+    </ul>
+    <button id="toggle-products">展開產品</button>
+    <div id="products-table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>產品名稱</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>ChatGPT-4o</td></tr>
+          <tr><td>ChatGPT-4o-mini</td></tr>
+          <tr><td>ChatGPT-o1</td></tr>
+          <tr><td>ChatGPT-o3-mini</td></tr>
+          <tr><td>ChatGPT-o3-mini-high</td></tr>
+          <tr><td>DallE</td></tr>
+          <tr><td>Claude 3.5 sonnet</td></tr>
+          <tr><td>Claude 3.5 haiku</td></tr>
+          <tr><td>Claude 3.0 opus</td></tr>
+          <tr><td>Sora</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <!-- 聯絡我 -->
   <section id="contact">
     <h2>聯絡我</h2>
@@ -681,7 +786,7 @@
         toggleElement.setAttribute('aria-checked', 'false');
       }
     }
-    // 此處僅處理移動版主題切換，若需要桌面版可另外添加對應元素
+    // 處理移動版主題切換
     const themeToggleMobile = document.getElementById('theme-toggle-mobile');
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark-theme') {
@@ -798,6 +903,19 @@
         navToggle.setAttribute('aria-expanded', 'false');
         sideNav.setAttribute('aria-hidden', 'true');
       });
+    });
+
+    /* 我的產品區塊：點擊按鈕展開/收起產品列表 */
+    const toggleProductsBtn = document.getElementById('toggle-products');
+    toggleProductsBtn.addEventListener('click', function() {
+      const container = document.getElementById('products-table-container');
+      if (container.style.display === "none" || container.style.display === "") {
+        container.style.display = "block";
+        this.textContent = "收起產品";
+      } else {
+        container.style.display = "none";
+        this.textContent = "展開產品";
+      }
     });
   </script>
 </body>
