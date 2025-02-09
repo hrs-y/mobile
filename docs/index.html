@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Harrison 的個人網站</title>
+  <title>Harrison's 的個人網站</title>
   <meta name="description" content="Harrison 的個人網站，展示他的技術能力、專案經驗以及對 C++ 的熱情。" />
   <meta name="keywords" content="Harrison, 個人網站, 軟體開發, C++, 技術庫, 專案展示" />
 
@@ -14,32 +14,47 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    /* 統一配色與變數 */
+    /* --- 全局配色與紙色主題變數 --- */
     :root {
-      --primary-color: #28a745;
-      --background-color: #ffffff;
-      --text-color: #333333;
-      --header-background: #ffffff;
-      --section-background: #ffffff;
+      --primary-color: #6f4e37;       /* 咖啡棕 */
+      --secondary-color: #8b5e3c;
+      --accent-color: #deb887;
+      --background-color: #fdfaf3;    /* 溫暖紙張色 */
+      --text-color: #4a4a4a;
+      --header-background: #fef7e7;
+      --section-background: #fef7e7;
       --section-text-color: #555555;
       --button-background: var(--primary-color);
       --button-text-color: #ffffff;
-      --button-hover-bg: #218838;
-      --overlay-color: rgba(40,167,69,0.2);
-      --footer-background: #ffffff;
+      --button-hover-bg: var(--secondary-color);
+      --overlay-color: rgba(111,78,55,0.3);
+      --footer-background: #fef7e7;
       --footer-text-color: #777777;
     }
-    body.dark-theme {
-      --background-color: #1A1A1A;
-      --text-color: #CCCCCC;
-      --header-background: #1A1A1A;
-      --section-background: #1E1E1E;
-      --section-text-color: #CCCCCC;
-      --footer-background: #1E1E1E;
-      --footer-text-color: #CCCCCC;
+    /* 紙色主題深色模式 */
+    body.dark-paper {
+      --primary-color: #c49e80;
+      --secondary-color: #a57b60;
+      --accent-color: #b8860b;
+      --background-color: #2b2b2b;
+      --text-color: #e0e0e0;
+      --header-background: #3a3a3a;
+      --section-background: #3a3a3a;
+      --section-text-color: #e0e0e0;
+      --footer-background: #3a3a3a;
+      --footer-text-color: #cccccc;
     }
-
-    /* 重置與基本字型 */
+    /* 深色模式下覆蓋部分硬編碼的白色背景與邊框 */
+    body.dark-paper .card-front,
+    body.dark-paper .card-back,
+    body.dark-paper .tech-item,
+    body.dark-paper .product-item,
+    body.dark-paper .contact-links a {
+      background-color: #3a3a3a;
+      border-color: #555;
+    }
+    
+    /* --- 基本重置與字型 --- */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Noto Sans TC', sans-serif;
@@ -49,8 +64,8 @@
       transition: background-color 0.5s, color 0.5s;
       scroll-behavior: smooth;
     }
-
-    /* 頂部：Logo 與漢堡按鈕 */
+    
+    /* --- 頂部區塊（Logo 與漢堡按鈕） --- */
     header {
       position: fixed;
       top: 0;
@@ -63,12 +78,22 @@
       align-items: center;
       transition: background 0.3s;
     }
-    .nav-container { width: 100%; display: flex; align-items: center; }
+    .nav-container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+    /* 修改 Logo 為 Harrison's 並加上小上標 Beta */
     .logo {
       font-family: 'Noto Serif TC', serif;
       font-size: 1.8em;
       font-weight: 700;
       color: var(--primary-color);
+    }
+    .logo sup {
+      font-size: 0.5em;
+      vertical-align: super;
+      margin-left: 2px;
     }
     .nav-toggle {
       margin-left: auto;
@@ -78,7 +103,7 @@
       cursor: pointer;
       color: var(--text-color);
     }
-    /* 側邊導航 */
+    /* --- 側邊導航（移動版） --- */
     .side-nav {
       height: 100%;
       width: 0;
@@ -109,8 +134,8 @@
       cursor: pointer;
       color: var(--text-color);
     }
-
-    /* 主題切換按鈕 */
+    
+    /* --- 主題切換按鈕 --- */
     .theme-switch {
       position: relative;
       display: inline-block;
@@ -141,10 +166,11 @@
     .theme-switch input:checked + .slider::before {
       transform: translateX(26px);
     }
-
-    /* 英雄區域 */
+    
+    /* --- 英雄區域 --- */
     .hero {
-      background: linear-gradient(to bottom right, var(--primary-color), #a8e6a1), url('background.png') no-repeat center center/cover;
+      background: linear-gradient(to bottom right, var(--primary-color), var(--accent-color));
+      /* 移除背景圖片，僅使用漸層 */
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -169,7 +195,7 @@
       align-items: center;
       max-width: 1000px;
       width: 90%;
-      background: rgba(40,167,69,0.8);
+      background: rgba(111,78,55,0.8);
       padding: 40px;
       border-radius: 15px;
       box-shadow: 0 8px 16px rgba(0,0,0,0.3);
@@ -223,8 +249,8 @@
       margin-right: 10px;
     }
     .cta-button:hover { background-color: var(--button-hover-bg); }
-
-    /* 各區塊統一樣式 */
+    
+    /* --- 各內容區塊（關於我、我在聽、技術庫、專案、產品、聯絡我） --- */
     section {
       padding: 40px 20px;
       max-width: 800px;
@@ -246,7 +272,6 @@
       color: var(--section-text-color);
       line-height: 1.6;
     }
-
     /* 鍵入動畫：關於我部分 */
     #about-text {
       overflow: hidden;
@@ -261,8 +286,23 @@
       content: "";
       animation: caret 0.75s step-end infinite;
     }
-
-    /* 技術庫網格 */
+    
+    /* --- Apple Music 播放器 --- */
+    .music-player {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .music-player iframe {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 660px;
+      border: 0;
+      background: transparent;
+    }
+    /* 刪除「以下是我近期喜歡的三首歌曲：」文字——直接移除該段落 */
+    
+    /* --- 技術庫網格 --- */
     .tech-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -302,8 +342,8 @@
       color: var(--text-color);
       font-size: 1em;
     }
-
-    /* 專案網格（翻牌效果） */
+    
+    /* --- 專案網格（翻牌效果） --- */
     .projects-grid {
       display: grid;
       gap: 20px;
@@ -372,10 +412,19 @@
       cursor: pointer;
       font-size: 0.8em;
     }
-
-    /* 我的產品區塊：使用產品卡片網格與展開動畫 */
-    /* 此處改用網格方式呈現產品 */
+    
+    /* --- 我的產品區塊 --- */
+    #products {
+      text-align: center;
+    }
     #products p { margin-bottom: 15px; }
+    #products ul {
+      text-align: left;
+      margin: 0 auto 20px;
+      max-width: 400px;
+      padding: 0;
+      list-style: disc;
+    }
     #products button {
       display: inline-block;
       padding: 10px 20px;
@@ -392,7 +441,7 @@
       background-color: var(--button-hover-bg);
       transform: translateY(-3px);
     }
-    /* 產品列表初始隱藏，利用 max-height 與 opacity 動畫 */
+    /* 產品列表區塊初始隱藏 */
     #products-table-container {
       max-height: 0;
       opacity: 0;
@@ -420,13 +469,13 @@
       transform: translateY(-3px);
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    body.dark-theme .product-item {
+    body.dark-paper .product-item {
       background: #2a2a2a;
       border-color: #444;
       color: #e0e0e0;
     }
-
-    /* 聯絡我 */
+    
+    /* --- 聯絡我 --- */
     .contact-links {
       display: flex;
       justify-content: center;
@@ -459,8 +508,8 @@
     .contact-links a:hover svg {
       fill: #ffffff;
     }
-
-    /* 底部資訊 */
+    
+    /* --- 底部資訊 --- */
     footer {
       background-color: var(--footer-background);
       padding: 20px;
@@ -480,8 +529,8 @@
       color: var(--footer-text-color);
       font-size: 0.8em;
     }
-
-    /* 返回頂部按鈕 */
+    
+    /* --- 返回頂部按鈕 --- */
     #back-to-top {
       position: fixed;
       bottom: 40px;
@@ -501,10 +550,10 @@
       transition: background-color 0.3s;
     }
     #back-to-top:hover { background-color: var(--button-hover-bg); }
-
+    
     /* 高亮動畫效果：側邊連結點擊後對應區塊高亮 */
     @keyframes highlight {
-      0% { background-color: rgba(40,167,69,0.3); }
+      0% { background-color: rgba(111,78,55,0.3); }
       100% { background-color: transparent; }
     }
     .highlight-animation {
@@ -516,7 +565,7 @@
   <!-- 頂部區塊：Logo 與漢堡按鈕 -->
   <header>
     <div class="nav-container">
-      <div class="logo">Harrison</div>
+      <div class="logo">Harrison's<sup>Beta</sup></div>
       <button class="nav-toggle" aria-label="開啟導航菜單" aria-expanded="false">
         <i class="fas fa-bars"></i>
       </button>
@@ -530,7 +579,7 @@
       <a href="#projects">我的專案</a>
       <a href="#products">我的產品</a>
       <a href="#contact">聯絡我</a>
-      <!-- 主題切換 -->
+      <!-- 主題切換（移動版） -->
       <div style="padding: 10px 20px;">
         <label class="theme-switch" aria-label="切換主題">
           <input type="checkbox" id="theme-toggle-mobile" aria-checked="false">
@@ -560,10 +609,9 @@
     <p id="about-text" class="typing"></p>
   </section>
 
-  <!-- 我在聽：Apple Music 播放器 -->
+  <!-- 我在聽：Apple Music 播放器（已移除多餘描述文字） -->
   <section id="music">
     <h2>我在聽 <span style="font-size:0.8em; color: var(--section-text-color);">(Apple Music 提供播放器服務)</span></h2>
-    <p>以下是我近期喜歡的三首歌曲：</p>
     <div class="music-player">
       <iframe allow="autoplay *; encrypted-media *;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts" src="https://embed.music.apple.com/us/album/%E9%A3%9B%E6%A9%9F%E5%A0%B4%E7%9A%8410-30-live/917203187?i=917203192"></iframe>
     </div>
@@ -651,7 +699,7 @@
     </div>
   </section>
 
-  <!-- 我的產品：改為以產品卡片網格方式呈現，並加入展開/收合動畫 -->
+  <!-- 我的產品：產品卡片網格與展開/收合動畫 -->
   <section id="products">
     <h2>我的產品</h2>
     <p>
@@ -664,7 +712,6 @@
       <li>支援主流語言模型產品</li>
     </ul>
     <button id="toggle-products">展開產品</button>
-    <!-- 產品列表區塊：使用網格呈現，初始隱藏 -->
     <div id="products-table-container">
       <div class="products-grid">
         <div class="product-item">ChatGPT-4o</div>
@@ -731,14 +778,14 @@
   </button>
 
   <script>
-    /* 主題切換：移動版與桌面同步 */
+    /* --- 主題切換功能（移動版與桌面同步採用 dark-paper 樣式） --- */
     function setTheme(toggleElement) {
       if (toggleElement.checked) {
-        document.body.classList.add('dark-theme');
-        localStorage.setItem('theme', 'dark-theme');
+        document.body.classList.add('dark-paper');
+        localStorage.setItem('theme', 'dark-paper');
         toggleElement.setAttribute('aria-checked', 'true');
       } else {
-        document.body.classList.remove('dark-theme');
+        document.body.classList.remove('dark-paper');
         localStorage.removeItem('theme');
         toggleElement.setAttribute('aria-checked', 'false');
       }
@@ -746,8 +793,8 @@
     // 處理移動版主題切換
     const themeToggleMobile = document.getElementById('theme-toggle-mobile');
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark-theme') {
-      document.body.classList.add('dark-theme');
+    if (savedTheme === 'dark-paper') {
+      document.body.classList.add('dark-paper');
       if (themeToggleMobile) {
         themeToggleMobile.checked = true;
         themeToggleMobile.setAttribute('aria-checked', 'true');
@@ -759,7 +806,7 @@
       });
     }
 
-    /* 漢堡按鈕觸發側邊導航 */
+    /* --- 漢堡按鈕觸發側邊導航 --- */
     const navToggle = document.querySelector('.nav-toggle');
     const sideNav = document.getElementById('side-nav');
     const closeBtn = document.querySelector('.close-btn');
@@ -777,7 +824,7 @@
       });
     }
 
-    /* 返回頂部按鈕 */
+    /* --- 返回頂部按鈕 --- */
     const backToTopBtn = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
       backToTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
@@ -786,7 +833,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    /* 使用 IntersectionObserver 觸發技術庫項目的滑入動畫 */
+    /* --- IntersectionObserver 觸發技術庫項目滑入動畫 --- */
     const techItems = document.querySelectorAll('.tech-item');
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
@@ -798,7 +845,7 @@
     }, { threshold: 0.3 });
     techItems.forEach(item => observer.observe(item));
 
-    /* 關於我部分鍵入動畫 */
+    /* --- 關於我部分鍵入動畫 --- */
     document.addEventListener('DOMContentLoaded', () => {
       const aboutTextElement = document.getElementById('about-text');
       const fullText = "你好！我是 Harrison，一名熱愛編程的開發者，專注於 C++ 並不斷探索更高效、更優雅的程式設計方式。\n\n我喜歡深入了解底層技術與演算法，無論是記憶體管理、多執行緒編程，還是最新的 C++ 標準，我都持續學習並實踐。\n\n此外，我熱衷於參與開源社區，分享我的學習心得和專案經驗。這個個人網站正是我的展示平台，期待與同樣熱愛技術的你交流與成長！";
@@ -817,7 +864,7 @@
       typeWriter();
     });
 
-    /* 專案卡牌翻轉效果 */
+    /* --- 專案卡牌翻轉效果 --- */
     document.querySelectorAll('.project-card .card-inner').forEach(card => {
       card.addEventListener('click', function(e) {
         if(e.target.classList.contains('flip-back')) return;
@@ -831,7 +878,7 @@
       });
     });
 
-    /* 側邊欄連結：點擊後對應區塊高亮並平滑滾動 */
+    /* --- 側邊欄連結：點擊後對應區塊高亮並平滑滾動 --- */
     const sideNavLinks = document.querySelectorAll('.side-nav a');
     sideNavLinks.forEach(link => {
       link.addEventListener('click', function(e) {
@@ -851,7 +898,7 @@
       });
     });
 
-    /* 我的產品區塊：展開/收合產品列表，應用展開動畫 */
+    /* --- 我的產品區塊：展開/收合產品列表 --- */
     const toggleProductsBtn = document.getElementById('toggle-products');
     toggleProductsBtn.addEventListener('click', function() {
       const container = document.getElementById('products-table-container');
