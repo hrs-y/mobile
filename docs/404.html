@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 - Harrison's</title>
+  <style>
+    /* 全頁藍色背景與白色文字，模仿藍屏 */
+    body {
+      margin: 0;
+      padding: 0;
+      background: #010080;
+      font-family: Consolas, "Courier New", monospace;
+      color: #ffffff;
+      overflow: hidden;
+      position: relative;
+    }
+    /* 背景動畫容器，位於頁面最底層 */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    /* 下落關鍵字樣式：採用較高不透明度的純白色，確保與背景形成對比 */
+    .keyword {
+      position: absolute;
+      top: -50px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 18px;
+      white-space: nowrap;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+    /* 藍屏式文字排版，固定在左上角 */
+    .bsod {
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      z-index: 1;
+      line-height: 1.5;
+      font-size: 16px;
+    }
+    .bsod .error-code {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    .bsod a {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- 背景下落動畫 -->
+  <div class="bg-animation" id="bg-animation"></div>
+  
+  <!-- 藍屏式訊息 -->
+  <div class="bsod">
+    <p class="error-code">404</p>
+    <p>A problem has been detected and the requested page is missing.</p>
+    <p>If this issue persists, please contact your system administrator.</p>
+    <p>Press any key to continue to <a href="https://devhys.com">Harrison's</a>.</p>
+  </div>
+  
+  <script>
+    // 定義 Linux / C++ 關鍵字或指令
+    const keywords = [
+      "if", "else", "while", "for", "switch", "case", "break", "continue",
+      "return", "class", "struct", "public", "private", "protected",
+      "Linux", "sudo", "make", "g++", "compile", "execute", "nullptr", "std", "#include"
+    ];
+    
+    const bgContainer = document.getElementById('bg-animation');
+    
+    // 建立下落關鍵字元素
+    function createKeyword() {
+      const span = document.createElement('span');
+      span.className = 'keyword';
+      span.innerText = keywords[Math.floor(Math.random() * keywords.length)];
+      span.style.left = Math.random() * window.innerWidth + 'px';
+      // 動畫持續時間設定為4-8秒
+      const duration = Math.random() * 4 + 4;
+      span.style.animationDuration = duration + 's';
+      // 加入隨機延遲以避免同步下落
+      span.style.animationDelay = Math.random() * 5 + 's';
+      bgContainer.appendChild(span);
+      
+      // 動畫結束後移除元素，避免 DOM 累積過多
+      setTimeout(() => {
+        span.remove();
+      }, (duration + 1) * 1000);
+    }
+    
+    // 每 300 毫秒生成一個新的關鍵字
+    setInterval(createKeyword, 300);
+    
+    // 模擬「按任意鍵繼續」：當有鍵盤事件發生時，自動跳轉
+    window.addEventListener('keydown', () => {
+      window.location.href = "https://devhys.com";
+    });
+  </script>
+</body>
+</html>
+
